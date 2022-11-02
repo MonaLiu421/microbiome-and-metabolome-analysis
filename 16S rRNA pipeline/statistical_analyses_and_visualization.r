@@ -51,3 +51,26 @@ set.seed(1024)
 library(vegan)
 adores <- adonis(distme ~ Description, data=sampleda, permutation=10000)
 data.frame(adores$aov.tab)
+
+#Bray–Curtis dissimilarity of microbiome
+wuyishan<-read.csv("bray-distance-input.csv",header = T)
+library(ggpubr)
+library(ggplot2)
+library(ggsignif)
+my_comparisons_a <- list(c("Non-return","Normal"),c("Nor-Non","Normal"),c("Nor-Non","Non-return"))
+pdf("bray-distance-wu.pdf",width = 4,height = 4)
+wuyishan$group1<-factor(wuyishan$group,levels = c("Non-return","Normal","Nor-Non"))
+p<- ggplot(wuyishan, aes(x=group1, y=distance,color=group))+
+  geom_boxplot(alpha=0.8, outlier.size=0, size=0.7, width=0.5, fill="transparent") +
+  labs(x="Groups", y="Bray–Curtis dissimilarity")+
+  stat_compare_means(method = "wilcox.test",
+                     comparisons = my_comparisons_a, label = "p.format")+
+  theme_bw()+ scale_color_manual(values=c("#ff0000","#efc000","#0084ff" ))+
+  scale_y_continuous(expand = expand_scale(mult = 0.08))+
+  theme(legend.position = "top")+ theme(rect=element_rect(fill='white'),
+                                        plot.margin=unit(rep(0.5,4), 'lines'),
+                                        panel.background=element_rect(fill='transparent', color='black'),
+                                        panel.border=element_rect(fill='transparent', color='transparent'),
+                                        panel.grid=element_blank())
+print(p)
+dev.off()
