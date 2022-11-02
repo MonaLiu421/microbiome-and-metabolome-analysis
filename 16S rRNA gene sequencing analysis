@@ -1,0 +1,25 @@
+#! /bin/bash
+source activate miniconda3/envs/qiime2-2021.11
+
+#import PairedEndFastqManifestPhred33 data
+qiime tools import --type 'SampleData[PairedEndSequencesWithQuality]'  --input-path $INPUT/manifest --output-path ${tmpdir}/${Work_dir}/demux.qza --input-format PairedEndFastqManifestPhre
+d33
+#Visualization
+qiime demux summarize --i-data demux.qza --o-visualization demux.qzv
+
+#merge the sequencing
+qiime vsearch join-pairs --i-demultiplexed-seqs $INPUT/result/demux.qza --o-joined-sequences ${tmpdir}/${Work_dir}/demux-joined.qza --p-threads 8
+#quality control
+qiime quality-filter q-score --i-demux $INPUT/result/demux-joined.qza --o-filtered-sequences ${tmpdir}/${Work_dir}/demux-joined-filtered.qza --o-filter-stats ${tmpdir}/${Work_dir}/demux-
+joined-filter-stats.qza
+#Visualization
+qiime demux summarize --i-data demux-joined-filtered.qza --o-visualization demux-joined-filtered.qzv
+qiime metadata tabulate --m-input-file demux-joined-filter-stats.qza --o-visualization demux-joined-filter-stats.qzv
+#denoise
+qiime deblur denoise-16S --i-demultiplexed-seqs $INPUT/result/demux-danduan.qza --p-trim-length 390 --p-sample-stats --o-representative-sequences ${tmpdir}/${Work_dir}/deblur-danduan-rep
+-seqs.qza --o-table ${tmpdir}/${Work_dir}/debulr-danduan-table.qza --o-stats ${tmpdir}/${Work_dir}/deblur-danduan-stats.qza --p-jobs-to-start 32
+
+
+
+
+
