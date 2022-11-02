@@ -3,9 +3,9 @@ library(phyloseq)
 library(tidyverse)
 library(RColorBrewer)
 #data import
-otu<-"wu-stool-filter-table.qza"
-rep <- "wu-stool-filter-rep-seqs.qza"
-tree <- "wu-stool-slivarooted-tree.qza"
+otu<-"stool-filter-table.qza"
+rep <- "stool-filter-rep-seqs.qza"
+tree <- "stool-slivarooted-tree.qza"
 tax <- "taxonomy-deblur-sliva.qza"
 sample <- "sample-metadata-w.txt"
 ps_dada2 <- import_qiime2(otuqza=otu, taxaqza=tax,refseqqza=rep,
