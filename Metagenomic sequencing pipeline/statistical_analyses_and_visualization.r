@@ -1,5 +1,5 @@
-otu <- read.delim('clipboard', row.names = 1, sep = '\t', stringsAsFactors = FALSE, check.names = FALSE)
 library(vegan)
+otu <- read.delim('clipboard', row.names = 1, sep = '\t', stringsAsFactors = FALSE, check.names = FALSE)
 otu<-t(otu)
 #observed_species <- estimateR(otu)[1, ]
 #observed_species<-as.data.frame(observed_species)
